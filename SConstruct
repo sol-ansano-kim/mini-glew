@@ -23,10 +23,9 @@ else:
 flags = ""
 linkflags = ""
 customs = [gl.Require]
+libs = []
 
 srcs = ["src/glew.c"]
-if sys.platform == "win32":
-    srcs.append("src/glew.rc")
 
 prjs = [{"name": glew_name,
          "type": "staticlib" if glew_static else "sharedlib",
@@ -36,7 +35,7 @@ prjs = [{"name": glew_name,
          "linkflags": linkflags,
          "incdirs": out_incdir,
          "libdirs": [],
-         "libs": [],
+         "libs": libs,
          "srcs": srcs,
          "version": version,
          "rpath": out_libdir,
@@ -63,6 +62,11 @@ def RequireGlew(env):
     env.Append(CPPPATH=[out_incdir])
     env.Append(LIBPATH=[out_libdir])
     env.Append(CPPDEFINES=["GLEW_NO_GLU"])
+
+    if glew_static:
+        gl.Require(env)
+        env.Append(LIBS=libs)
+        env.Append(CPPDEFINES=["GLEW_STATIC"])
 
     excons.Link(env, GlewPath(), static=glew_static, force=True, silent=True)
 
