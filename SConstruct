@@ -44,10 +44,7 @@ prjs = [{"name": glew_name,
          "install": header_install}]
 
 def GlewName():
-    libname = "glew"
-    if sys.platform == "win32" and glew_static:
-        libname = "lib" + libname
-    return libname
+    return "glew"
 
 def GlewPath():
     name = GlewName()
