@@ -26,6 +26,7 @@ customs = [gl.Require]
 libs = []
 
 srcs = ["src/glew.c"]
+header_install = {os.path.join(out_incdir, "GL"): excons.Glob("include/GL/*.h")}
 
 prjs = [{"name": glew_name,
          "type": "staticlib" if glew_static else "sharedlib",
@@ -40,7 +41,7 @@ prjs = [{"name": glew_name,
          "version": version,
          "rpath": out_libdir,
          "custom": customs,
-         "install": {out_incdir: excons.Glob("include/GL")}}]
+         "install": header_install}]
 
 def GlewName():
     libname = "glew"
