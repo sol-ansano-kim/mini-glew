@@ -45,6 +45,7 @@ prjs = [{"name": glew_name,
          "version": version,
          "rpath": out_libdir,
          "custom": customs,
+         "symvis": "default",
          "install": header_install}]
 
 def GlewName():
