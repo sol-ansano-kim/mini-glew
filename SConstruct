@@ -80,3 +80,5 @@ excons.AddHelpOptions(USD="""GLEW OPTIONS
 targets = excons.DeclareTargets(env, prjs)
 
 Export("GlewName GlewPath RequireGlew")
+
+env.Default("glew")
