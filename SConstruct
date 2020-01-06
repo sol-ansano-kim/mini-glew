@@ -12,8 +12,12 @@ out_libdir = os.path.join(out_basedir, "lib")
 
 glew_name = "glew"
 glew_static = excons.GetArgument("glew-static", 1, int) != 0
+no_glu = excons.GetArgument("glew-no-glu", 0, int) != 0
 
-defs = ["GLEW_NO_GLU"]
+defs = []
+if no_glu:
+    defs.append("GLEW_NO_GLU")
+
 if glew_static:
     defs.append("GLEW_STATIC")
 else:
@@ -41,6 +45,7 @@ prjs = [{"name": glew_name,
          "version": version,
          "rpath": out_libdir,
          "custom": customs,
+         "symvis": "default",
          "install": header_install}]
 
 def GlewName():
@@ -59,7 +64,8 @@ def RequireGlew(env):
     gl.Require(env)
     env.Append(CPPPATH=[out_incdir])
     env.Append(LIBPATH=[out_libdir])
-    env.Append(CPPDEFINES=["GLEW_NO_GLU"])
+    if no_glu:
+        env.Append(CPPDEFINES=["GLEW_NO_GLU"])
 
     if glew_static:
         gl.Require(env)
@@ -69,8 +75,11 @@ def RequireGlew(env):
     excons.Link(env, GlewPath(), static=glew_static, force=True, silent=True)
 
 excons.AddHelpOptions(USD="""GLEW OPTIONS
-  glew-static=0|1          : Toggle between static and shared library build [1]""")
+  glew-static=0|1          : Toggle between static and shared library build [1]
+  glew-no-glu=0|1          : Toggle using GLU[0]""")
 
 targets = excons.DeclareTargets(env, prjs)
 
 Export("GlewName GlewPath RequireGlew")
+
+env.Default("glew")
